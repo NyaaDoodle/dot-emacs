@@ -1,6 +1,9 @@
 ;; Global settings
 (setq inhibit-startup-message t)
 (setq-default tab-width 4)
+(setq c-default-style "k&r"
+      c-basic-offset 4)
+(setq-default indent-tabs-mode nil)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 ;; Mode settings
@@ -18,8 +21,14 @@
 				eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
+;; Blank the scratch buffer message
+(setq initial-scratch-message "")
+
+;; Initial Major Mode
+(setq initial-major-mode 'fundamental-mode)
+
 ;; Font
-(set-face-attribute 'default nil :font "Hack" :height 200)
+(set-face-attribute 'default nil :font "Inconsolata" :height 200)
 
 ;; Package management
 (require 'package)
@@ -33,6 +42,10 @@
   (package-install 'use-package))
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+(use-package rust-mode)
+(add-hook 'rust-mode-hook
+		  (lambda () (setq indent-tabs-mode nil)))
 
 (use-package ivy
   :init (ivy-mode 1)
@@ -90,7 +103,7 @@
     :config
     (setq doom-themes-enable-bold t
 	  doom-themes-enable-italic t)
-    (load-theme 'doom-monokai-pro t))
+    (load-theme 'doom-xcode t))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -98,7 +111,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
+   '(rust-mode helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
