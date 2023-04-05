@@ -47,6 +47,9 @@
 (add-hook 'rust-mode-hook
 		  (lambda () (setq indent-tabs-mode nil)))
 
+(use-package slime)
+(setq inferior-lisp-program "clisp")
+
 (use-package ivy
   :init (ivy-mode 1)
   :diminish
@@ -103,7 +106,7 @@
     :config
     (setq doom-themes-enable-bold t
 	  doom-themes-enable-italic t)
-    (load-theme 'doom-xcode t))
+    (load-theme 'doom-moonlight t))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -111,7 +114,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(rust-mode helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
+   '(slime rust-mode helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
