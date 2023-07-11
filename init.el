@@ -18,8 +18,15 @@
 (dolist (mode '(org-mode-hook
 				term-mode-hook
 				shell-mode-hook
-				eshell-mode-hook))
+				eshell-mode-hook
+                vterm-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(setq recentf-max-saved-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
 
 ;; Blank the scratch buffer message
 (setq initial-scratch-message "")
@@ -28,7 +35,7 @@
 (setq initial-major-mode 'fundamental-mode)
 
 ;; Font
-(set-face-attribute 'default nil :font "Inconsolata" :height 200)
+(set-face-attribute 'default nil :font "Fira Code" :height 200)
 
 ;; Package management
 (require 'package)
@@ -43,12 +50,42 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (XXX-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+;; if you are ivy user
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+(use-package company)
+(add-hook 'after-init-hook 'global-company-mode)
+
+(use-package ccls
+  :hook ((c-mode c++-mode objc-mode cuda-mode) .
+         (lambda () (require 'ccls) (lsp))))
+(setq ccls-executable "/path/to/ccls/Release/ccls")
+(setq ccls-args '("--log-file=/tmp/ccls.log"))
+
+(use-package vterm)
+
+(use-package restart-emacs)
+
 (use-package rust-mode)
 (add-hook 'rust-mode-hook
 		  (lambda () (setq indent-tabs-mode nil)))
 
+(use-package zig-mode)
+
 (use-package slime)
-(setq inferior-lisp-program "clisp")
+(setq inferior-lisp-program "sbcl")
 
 (use-package ivy
   :init (ivy-mode 1)
@@ -97,6 +134,10 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-key] . helpful-key))
 
+(use-package exec-path-from-shell)
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+
 (use-package all-the-icons)
 
 (use-package doom-modeline
@@ -106,7 +147,7 @@
     :config
     (setq doom-themes-enable-bold t
 	  doom-themes-enable-italic t)
-    (load-theme 'doom-moonlight t))
+    (load-theme 'doom-palenight t))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -114,7 +155,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(slime rust-mode helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
+   '(ccls company lsp-treemacs lsp-ivy lsp-ui lsp-mode zig-mode restart-emacs vterm exec-path-from-shell slime rust-mode helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
