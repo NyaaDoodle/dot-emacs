@@ -138,10 +138,10 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
-(use-package all-the-icons)
-
 (use-package doom-modeline
     :init (doom-modeline-mode 1))
+(use-package nerd-icons)
+(setq doom-modeline-icon t)
 
 (use-package doom-themes
     :config
