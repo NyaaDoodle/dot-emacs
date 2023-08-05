@@ -6,6 +6,15 @@
 (menu-bar-mode -1)
 (set-fringe-mode 10)
 
+;; Subtle Visible-bell (taken from emacswiki.org/emacs/AlarmBell) 
+(setq ring-bell-function
+      (lambda ()
+        (let ((orig-fg (face-foreground 'mode-line)))
+          (set-face-foreground 'mode-line "#F2804F")
+          (run-with-idle-timer 0.1 nil
+                               (lambda (fg) (set-face-foreground 'mode-line fg))
+                               orig-fg))))
+
 ;; Line/Column Numbers Settings
 (column-number-mode)
 (global-display-line-numbers-mode t)
@@ -141,10 +150,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("28d61ac6f26030e3c649e9f75b6ebd93dbf7f5f7b2f13e14cb1fe101e8cf4737" default))
  '(package-selected-packages
-   '(hydra evil-collection evil general helpful counsel ivy-rich which-key rainbow-delimiters nerd-fonts modus-themes ivy use-package doom-modeline)))
+   '(evil-collection evil general modus-themes ccls company lsp-treemacs lsp-ivy lsp-ui lsp-mode zig-mode restart-emacs vterm exec-path-from-shell slime rust-mode helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
