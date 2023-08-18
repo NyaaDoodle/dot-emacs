@@ -196,17 +196,3 @@
 ;; Common Lisp and SLIME
 (use-package slime)
 (setq inferior-lisp-program "sbcl")
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(evil-collection evil general modus-themes ccls company lsp-treemacs lsp-ivy lsp-ui lsp-mode zig-mode restart-emacs vterm exec-path-from-shell slime rust-mode helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
