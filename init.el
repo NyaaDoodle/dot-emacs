@@ -37,6 +37,9 @@
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
+;; Tab indent
+(setq-default tab-width 4)
+
 ;; Recent Files
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
@@ -48,6 +51,10 @@
 
 ;; Initial Major Mode
 (setq initial-major-mode 'fundamental-mode)
+
+;; C Lang Settings
+(setq c-default-style "k&r"
+      c-basic-offset 4)
 
 ;; Font Settings
 (set-face-attribute 'default nil :font "Fira Code" :height 200)
