@@ -57,7 +57,7 @@
       c-basic-offset 4)
 
 ;; Font Settings
-(set-face-attribute 'default nil :font "Fira Code" :height 200)
+(set-face-attribute 'default nil :font "Fantasque Sans Mono" :height 200)
 
 ;; Theme Settings
 (use-package modus-themes)
