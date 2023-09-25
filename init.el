@@ -20,7 +20,7 @@
 (menu-bar-mode -1)
 (set-fringe-mode 10)
 
-;; Subtle Visible-bell (taken from emacswiki.org/emacs/AlarmBell) 
+;; Subtle Visible-bell (taken from: emacswiki.org/emacs/AlarmBell) 
 (setq ring-bell-function
       (lambda ()
         (let ((orig-fg (face-foreground 'mode-line)))
@@ -37,14 +37,19 @@
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;; Tab indent
-(setq-default tab-width 4)
-
 ;; Recent Files
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (setq recentf-max-saved-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
+;; Auto-save and backup directory settings
+;; (Taken from: https://stackoverflow.com/questions/22175365/gitignore-regex-for-emacs-temporary-files)
+(setq auto-save-file-name-transforms
+          `((".*" ,(concat user-emacs-directory "auto-save/") t)))
+(setq backup-directory-alist
+      `(("." . ,(expand-file-name
+                 (concat user-emacs-directory "backups")))))
 
 ;; Blank the scratch buffer message
 (setq initial-scratch-message "")
@@ -52,16 +57,15 @@
 ;; Initial Major Mode
 (setq initial-major-mode 'fundamental-mode)
 
-;; C Lang Settings
-(setq c-default-style "k&r"
-      c-basic-offset 4)
-
 ;; Font Settings
 (set-face-attribute 'default nil :font "Fantasque Sans Mono" :height 200)
 
 ;; Theme Settings
-(use-package modus-themes)
-(load-theme 'modus-vivendi-tinted :no-confirm)
+;;(use-package modus-themes)
+;;(load-theme 'modus-vivendi-tinted :no-confirm)
+;; or using doom-themes
+(use-package doom-themes)
+(load-theme 'doom-xcode :no-confirm)
 
 ;; Keybindings
 (use-package general
@@ -203,3 +207,17 @@
 ;; Common Lisp and SLIME
 (use-package slime)
 (setq inferior-lisp-program "sbcl")
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(evil-collection evil general modus-themes ccls company lsp-treemacs lsp-ivy lsp-ui lsp-mode zig-mode restart-emacs vterm exec-path-from-shell slime rust-mode helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
