@@ -20,6 +20,9 @@
 (menu-bar-mode -1)
 (set-fringe-mode 10)
 
+(use-package modus-themes)
+(load-theme 'modus-vivendi :no-confirm)
+
 ;; Subtle Visible-bell (taken from: emacswiki.org/emacs/AlarmBell) 
 (setq ring-bell-function
       (lambda ()
@@ -56,10 +59,6 @@
 
 ;; Initial Major Mode
 (setq initial-major-mode 'fundamental-mode)
-
-;; Theme Settings
-(use-package modus-themes)
-(load-theme 'modus-vivendi :no-confirm)
 
 ;; Keybindings
 (use-package general
@@ -153,7 +152,6 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
-(use-package restart-emacs)
 
 ;; Rust Mode
 (use-package rust-mode)
@@ -173,7 +171,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(evil-collection evil general modus-themes ccls company lsp-treemacs lsp-ivy lsp-ui lsp-mode zig-mode restart-emacs vterm exec-path-from-shell slime rust-mode helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
+   '(modus-themes slime zig-mode rust-mode hydra evil-collection evil general helpful which-key use-package doom-themes doom-modeline counsel all-the-icons)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
