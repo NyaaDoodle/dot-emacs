@@ -20,6 +20,12 @@
 (menu-bar-mode -1)
 (set-fringe-mode 10)
 
+;; Tabs and Style Settings
+(setq-default tab-width 4)
+(setq c-default-style "k&r"
+      c-basic-offset 4)
+(setq-default indent-tabs-mode nil)
+
 ;; Subtle Visible-bell (taken from: emacswiki.org/emacs/AlarmBell) 
 (setq ring-bell-function
       (lambda ()
