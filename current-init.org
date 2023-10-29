@@ -1,0 +1,117 @@
+#+title: Current Emacs Configuration
+#+author: NyaaDoodle
+#+STARTUP: overview
+* Theme
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'modus-themes)
+  (load-theme 'modus-vivendi-tinted :no-confirm)
+#+END_SRC
+* Font
+#+BEGIN_SRC emacs-lisp
+  (set-face-attribute 'default nil :font "Fantasque Sans Mono" :height 220)
+#+END_SRC
+* Base UI Settings
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-message t)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (menu-bar-mode -1)
+  (set-fringe-mode 10)
+#+END_SRC
+* Tab Indentation and Styling
+#+BEGIN_SRC emacs-lisp
+  (setq-default tab-width 4)
+  (setq-default indent-tabs-mode nil)
+  (setq c-default-style "k&r"
+        c-basic-offset 4)
+#+END_SRC
+* Audible/Visual Bell
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function
+        (lambda ()
+          (let ((orig-fg (face-foreground 'mode-line)))
+            (set-face-foreground 'mode-line "#F2804F")
+            (run-with-idle-timer 0.1 nil
+                                 (lambda (fg) (set-face-foreground 'mode-line fg))
+                                 orig-fg))))
+#+END_SRC
+* Scratch Buffer
+#+BEGIN_SRC emacs-lisp
+  (setq initial-scratch-message "")
+  (setq initial-major-mode 'fundamental-mode)
+#+END_SRC
+* Line Numbers
+#+BEGIN_SRC emacs-lisp
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
+  (dolist (mode '(term-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+#+END_SRC
+* Auto-save and Backup
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-file-name-transforms
+        `((".*" ,(concat user-emacs-directory "auto-save/") t)))
+  (setq backup-directory-alist
+        `(("." . ,(expand-file-name
+                   (concat user-emacs-directory "backups")))))
+#+END_SRC
+
+* Doom Modeline
+#+BEGIN_SRC emacs-lisp
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :custom (doom-modeline-height 36))
+  (use-package nerd-icons)
+#+END_SRC
+* Vertico
+#+BEGIN_SRC emacs-lisp
+  (use-package vertico
+    :init (vertico-mode))
+  (use-package savehist
+    :init (savehist-mode))
+  (use-package marginalia
+    :after vertico
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init (marginalia-mode))
+#+END_SRC
+* Which-key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :init (which-key-mode))
+#+END_SRC
+* Helpful
+#+BEGIN_SRC emacs-lisp
+  (use-package helpful
+    :bind
+    ([remap describe-key]      . helpful-key)
+    ([remap describe-command]  . helpful-command)
+    ([remap describe-variable] . helpful-variable)
+    ([remap describe-function] . helpful-callable))
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+  (global-set-key (kbd "C-h F") #'helpful-function)
+#+END_SRC
+* Rainbow Delimiters
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+END_SRC
+* Programming Language Specific
+** Rust
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-mode)
+  (add-hook 'rust-mode-hook
+            (lambda () (setq indent-tabs-mode nil)))
+#+END_SRC
+** Zig
+#+BEGIN_SRC emacs-lisp
+  (use-package zig-mode)
+#+END_SRC
+** Common Lisp and SLIME
+#+BEGIN_SRC emacs-lisp
+  (use-package slime)
+  (setq inferior-lisp-program "sbcl")
+#+END_SRC
+

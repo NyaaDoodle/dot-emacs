@@ -1,0 +1,7 @@
+* Emacs Lisp Source Block Boilerplate
+#+BEGIN_SRC emacs-lisp
+  (defun el-org-boilerplate ()
+    "Inserts an Emacs Lisp source block according to Org"
+    (interactive)
+    (insert "#+BEGIN_SRC emacs-lisp\n\n#+END_SRC\n"))
+#+END_SRC
