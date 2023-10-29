@@ -1,0 +1,271 @@
+#+title: Current Emacs Configuration
+#+author: NyaaDoodle
+#+STARTUP: overview
+* Theme
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'modus-themes)
+  (load-theme 'modus-vivendi-tinted :no-confirm)
+#+END_SRC
+* Font
+#+BEGIN_SRC emacs-lisp
+  (set-face-attribute 'default nil :font "Fantasque Sans Mono" :height 220)
+#+END_SRC
+* Base UI Settings
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-message t)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (menu-bar-mode -1)
+  (set-fringe-mode 10)
+#+END_SRC
+* Tab Indentation and Styling
+#+BEGIN_SRC emacs-lisp
+  (setq-default tab-width 4)
+  (setq-default indent-tabs-mode nil)
+  (setq c-default-style "k&r"
+        c-basic-offset 4)
+#+END_SRC
+* Audible/Visual Bell
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function
+        (lambda ()
+          (let ((orig-fg (face-foreground 'mode-line)))
+            (set-face-foreground 'mode-line "#F2804F")
+            (run-with-idle-timer 0.1 nil
+                                 (lambda (fg) (set-face-foreground 'mode-line fg))
+                                 orig-fg))))
+#+END_SRC
+* Scratch Buffer
+#+BEGIN_SRC emacs-lisp
+  (setq initial-scratch-message "")
+  (setq initial-major-mode 'fundamental-mode)
+#+END_SRC
+* Line Numbers
+#+BEGIN_SRC emacs-lisp
+  (column-number-mode)
+  (global-display-line-numbers-mode t)
+  (dolist (mode '(term-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+#+END_SRC
+* Auto-save and Backup
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-file-name-transforms
+        `((".*" ,(concat user-emacs-directory "auto-save/") t)))
+  (setq backup-directory-alist
+        `(("." . ,(expand-file-name
+                   (concat user-emacs-directory "backups")))))
+#+END_SRC
+
+* Doom Modeline
+#+BEGIN_SRC emacs-lisp
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :custom (doom-modeline-height 36))
+  (use-package nerd-icons)
+#+END_SRC
+* Vertico
+#+BEGIN_SRC emacs-lisp
+  (use-package vertico
+    :init (vertico-mode))
+  (use-package savehist
+    :init (savehist-mode))
+  (use-package marginalia
+    :after vertico
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init (marginalia-mode))
+#+END_SRC
+* Which-key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :init (which-key-mode))
+#+END_SRC
+* Helpful
+#+BEGIN_SRC emacs-lisp
+  (use-package helpful
+    :bind
+    ([remap describe-key]      . helpful-key)
+    ([remap describe-command]  . helpful-command)
+    ([remap describe-variable] . helpful-variable)
+    ([remap describe-function] . helpful-callable))
+  (global-set-key (kbd "C-c C-d") #'helpful-at-point)
+  (global-set-key (kbd "C-h F") #'helpful-function)
+#+END_SRC
+* Consult
+#+BEGIN_SRC emacs-lisp
+(use-package consult
+  :bind (;; C-c bindings in `mode-specific-map'
+         ("C-c M-x" . consult-mode-command)
+         ("C-c h" . consult-history)
+         ("C-c k" . consult-kmacro)
+         ("C-c m" . consult-man)
+         ("C-c i" . consult-info)
+         ([remap Info-search] . consult-info)
+         ;; C-x bindings in `ctl-x-map'
+         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ;; Custom M-# bindings for fast register access
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("C-M-#" . consult-register)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ;; M-g bindings in `goto-map'
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings in `search-map'
+         ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+         ("M-s c" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         :map minibuffer-local-map
+         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+  (advice-add #'register-preview :override #'consult-register-window)
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+  :config
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   :preview-key '(:debounce 0.4 any))
+  (setq consult-narrow-key "<") ;; "C-+"
+)
+#+END_SRC
+* Embark
+#+BEGIN_SRC emacs-lisp
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act)         
+   ("C-;" . embark-dwim)        
+   ("C-h B" . embark-bindings))
+  :init
+  (setq prefix-help-command #'embark-prefix-help-command)
+  (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+  :config
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+(use-package embark-consult
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
+#+END_SRC
+* Orderless
+#+BEGIN_SRC emacs-lisp
+  (use-package orderless
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion)))))
+#+END_SRC
+* Rainbow Delimiters
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+END_SRC
+* Programming Language Specific
+** Rust
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-mode)
+  (add-hook 'rust-mode-hook
+            (lambda () (setq indent-tabs-mode nil)))
+#+END_SRC
+** Zig
+#+BEGIN_SRC emacs-lisp
+  (use-package zig-mode)
+#+END_SRC
+** Common Lisp and SLIME
+#+BEGIN_SRC emacs-lisp
+  (use-package slime)
+  (setq inferior-lisp-program "sbcl")
+#+END_SRC
+* LSP Mode
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :commands (lsp lsp-deferred)
+    :hook (lsp-mode . efs/lsp-mode-setup)
+    :init
+    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+    :config
+    (lsp-enable-which-key-integration t))
+  (use-package lsp-ui
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    (lsp-ui-doc-position 'bottom))
+#+END_SRC
+** Programming Languages
+*** C/C++
+#+BEGIN_SRC emacs-lisp
+  (use-package ccls
+    :hook ((c-mode c++-mode objc-mode cuda-mode) .
+           (lambda () (require 'ccls) (lsp))))
+#+END_SRC
+* Company
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :after lsp-mode
+    :hook (lsp-mode . company-mode)
+    :bind (:map company-active-map
+                ("<tab>" . company-complete-selection))
+    (:map lsp-mode-map
+          ("<tab>" . company-indent-or-complete-common))
+    :custom
+    (company-minimum-prefix-length 1)
+    (company-idle-delay 0.0))
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
+#+END_SRC
+* Magit
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+#+END_SRC
+* Projectile
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :diminish projectile-mode
+    :config (projectile-mode)
+    :custom ((projectile-completion-system 'ivy))
+    :bind-keymap
+    ("C-c p" . projectile-command-map)
+    :init
+    ;; NOTE: Set this to the folder where you keep your Git repos!
+    (when (file-directory-p "~/Projects/")
+      (setq projectile-project-search-path '("~/Projects/")))
+    (setq projectile-switch-project-action #'projectile-dired))
+#+END_SRC
