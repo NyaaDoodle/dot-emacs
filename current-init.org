@@ -255,17 +255,3 @@
     :custom
     (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 #+END_SRC
-* Projectile
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :diminish projectile-mode
-    :config (projectile-mode)
-    :custom ((projectile-completion-system 'ivy))
-    :bind-keymap
-    ("C-c p" . projectile-command-map)
-    :init
-    ;; NOTE: Set this to the folder where you keep your Git repos!
-    (when (file-directory-p "~/Projects/")
-      (setq projectile-project-search-path '("~/Projects/")))
-    (setq projectile-switch-project-action #'projectile-dired))
-#+END_SRC
