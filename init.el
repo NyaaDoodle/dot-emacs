@@ -14,6 +14,7 @@
 (setq package-enable-at-startup nil)
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
+(use-package org)
 ;; Loading config files as Org files
 (org-babel-load-file (expand-file-name "~/.emacs.d/current-init.org"))
 (org-babel-load-file (expand-file-name "~/.emacs.d/custom-macros.org"))

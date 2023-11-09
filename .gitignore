@@ -8,3 +8,7 @@
 /auto-save-list/
 /eshell/
 /.lsp-session-v1
+/.org-id-locations
+/bookmarks
+/projects
+/org-roam.db
