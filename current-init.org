@@ -66,14 +66,6 @@
     :custom (doom-modeline-height 36))
   (use-package nerd-icons)
 #+END_SRC
-* Org Roam
-#+BEGIN_SRC emacs-lisp
-  (use-package org-roam
-    :config (setq org-roam-directory (file-truename "~/Org/org-roam"))
-    (org-roam-db-autosync-mode)
-    :bind (("C-c n f" . org-roam-node-find)
-           ("C-c n i" . org-roam-node-insert)))
-#+END_SRC
 * Vertico
 #+BEGIN_SRC emacs-lisp
   (use-package vertico
