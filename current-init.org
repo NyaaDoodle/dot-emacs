@@ -19,6 +19,7 @@
   (tooltip-mode -1)
   (menu-bar-mode -1)
   (set-fringe-mode 10)
+  (visual-line-mode)
 #+END_SRC
 * Tab Indentation and Styling
 #+BEGIN_SRC emacs-lisp
